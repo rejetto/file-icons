@@ -2,7 +2,7 @@ exports.version = 1.0
 exports.description = "Customize file icons"
 exports.apiRequired = 8.1 // entryIcon
 exports.frontend_js = 'main.js'
-exports.repo = 'rejetto/file-icons'
+exports.repo = "rejetto/file-icons"
 
 exports.config = {
     icons: {
