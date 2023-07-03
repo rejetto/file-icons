@@ -1,4 +1,4 @@
-exports.version = 1.0
+exports.version = 1.01
 exports.description = "Customize file icons"
 exports.apiRequired = 8.1 // entryIcon
 exports.frontend_js = 'main.js'
@@ -11,7 +11,7 @@ exports.config = {
         type: 'array',
         sx: { width: 'min(90vw, 30em)'  },
         fields: {
-            ext: { placeholder: 'Example: pdf', helperText: "File extension. Don't include dot" },
+            ext: { placeholder: 'Example: pdf|doc', helperText: "File extension(s). Don't include dot" },
             iconFile: { type: 'real_path', $width: 3, fileMask: '*.png|*.ico|*.jpg|*.jpeg|*.gif|*.svg' },
         }
     }
