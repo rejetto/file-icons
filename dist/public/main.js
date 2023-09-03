@@ -1,10 +1,12 @@
-const cfg = HFS.getPluginConfig()
-if (cfg.icons) {
+"use strict";{
+    const cfg = HFS.getPluginConfig()
     const exts = cfg.icons.map(x => x.ext.split('|')).flat()
+    const { folders } = cfg
     const { h, prefixUrl } = HFS
-    HFS.onEvent('entryIcon', ({ entry: { ext } }, tools, output) => {
-        if (output.find(Boolean)) return // no multiple icons
-        if (exts.includes(ext))
-            return h('img', { src: prefixUrl + '/?fileIcon=' + ext, className: 'icon custom-icon' })
+    HFS.onEvent('entryIcon', ({ entry: { ext, isFolder } }, tools, output) => {
+        if (output.some(Boolean)) return // skip if another plugin already set an icon
+        const icon = isFolder ? folders && '.' : exts.includes(ext) && ext
+        if (icon)
+            return h('img', { src: prefixUrl + '/?fileIcon=' + icon, className: 'icon custom-icon' })
     })
 }

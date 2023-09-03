@@ -1,10 +1,10 @@
 # file-icons
 
-[HFS plugin](https://github.com/rejetto/hfs) to customize file icons.
+[HFS plugin](https://github.com/rejetto/hfs) to customize icons of files (based on their extension) and folders.
 
 This configuration
 
-<img width="400" alt="image" src="https://github.com/rejetto/file-icons/assets/1367199/0723095e-3056-4246-bf7c-bf96dd0c5163">
+<img width="400" alt="image" src="https://github.com/rejetto/file-icons/assets/1367199/731d5fd0-950f-42e4-beeb-46f92b72c30b">
 
 leads to this result
 

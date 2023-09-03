@@ -1,18 +1,23 @@
-exports.version = 1.03
+exports.version = 2
 exports.description = "Customize file icons"
 exports.apiRequired = 8.1 // entryIcon
 exports.frontend_js = 'main.js'
 exports.repo = "rejetto/file-icons"
 
+exports.configDialog = {
+    sx: { maxWidth: '40em' },
+}
+
+const fileMask = '*.png|*.ico|*.jpg|*.jpeg|*.gif|*.svg'
 exports.config = {
+    folders: { frontend: true, type: 'real_path', fileMask, label: "Icon for folders" },
     icons: {
         frontend: true,
-        label: '',
+        label: "Icons for files by extension",
         type: 'array',
-        sx: { width: 'min(90vw, 30em)'  },
         fields: {
             ext: { placeholder: 'Example: pdf|doc', helperText: "File extension(s). Don't include dot" },
-            iconFile: { type: 'real_path', $width: 3, fileMask: '*.png|*.ico|*.jpg|*.jpeg|*.gif|*.svg' },
+            iconFile: { type: 'real_path', $width: 3, fileMask },
         }
     }
 }
@@ -21,13 +26,11 @@ exports.init = api => ({
     middleware: ctx => {
         const {fileIcon} = ctx.query
         if (!fileIcon) return
-        const icons = api.getConfig('icons')
         const {matches} = api.require('./misc')
-        const icon = icons?.find(x => matches(fileIcon, x.ext))
+        const icon = fileIcon === '.' ? api.getConfig('folders') // . is the special value for folders
+            : api.getConfig('icons')?.find(x => matches(fileIcon, x.ext))?.iconFile
         if (!icon) return
-        const { iconFile } = icon
-        if (!iconFile) return
         const {serveFile} = api.require('./serveFile')
-        return serveFile(ctx, iconFile)
+        return serveFile(ctx, icon)
     }
 })
