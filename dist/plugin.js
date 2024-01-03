@@ -1,4 +1,4 @@
-exports.version = 2.1
+exports.version = 2.2
 exports.description = "Customize file icons"
 exports.apiRequired = 8.1 // entryIcon
 exports.frontend_js = 'main.js'
