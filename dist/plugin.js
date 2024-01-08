@@ -1,4 +1,4 @@
-exports.version = 2.2
+exports.version = 2.3
 exports.description = "Customize file icons"
 exports.apiRequired = 8.1 // entryIcon
 exports.frontend_js = 'main.js'
@@ -33,6 +33,7 @@ exports.init = api => ({
                 : api.getConfig('icons')?.find(x => matches(fileIcon, x.ext))?.iconFile
         if (!icon) return
         const {serveFile} = api.require('./serveFile')
+        ctx.state.considerAsGui = true
         return serveFile(ctx, icon)
     }
 })
