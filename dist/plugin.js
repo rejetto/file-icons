@@ -1,4 +1,4 @@
-exports.version = 3
+exports.version = 3.12
 exports.description = "Customize file icons"
 exports.apiRequired = 8.891 // singleWorkerFromBatchWorker-returning
 exports.frontend_js = 'main.js'
@@ -11,7 +11,8 @@ exports.configDialog = {
 const fileMask = '*.png|*.ico|*.jpg|*.jpeg|*.gif|*.svg'
 exports.config = {
     folders: { frontend: true, type: 'real_path', fileMask, label: "Icon for folders" },
-    system: { frontend: true, defaultValue: '', label: "Use system icon for", placeholder: 'Example: pdf|doc', helperText: "⚠️ Windows only" },
+    systemExt: { frontend: true, label: "Use system icon for each extension", defaultValue: '', placeholder: 'Example: pdf|doc', helperText: "⚠️ Windows only. Use this when icon is the same for all files with same extension" },
+    systemIndividual: { frontend: true, label: "System icon for each file", defaultValue: '', placeholder: 'Example: exe', helperText: "⚠️ Windows only. This is normally useful only with exe files." },
     icons: {
         frontend: true,
         label: "Icons for files by extension",
@@ -48,7 +49,14 @@ exports.init = api => {
         async middleware(ctx) {
             const { fileIcon } = ctx.query
             if (!fileIcon) return
-            if (matches(fileIcon, api.getConfig('system'))) {
+            if (fileIcon === '|')
+                return async () => { // wait to get fileSource
+                    ctx.type = 'image/png'
+                    const { fileSource } = ctx.state
+                    ctx.body = await (cache[fileSource] ||= getIcon(fileSource))
+                    return
+                }
+            if (matches(fileIcon, api.getConfig('systemExt'))) {
                 const sample = sampleFiles[fileIcon.toLowerCase()]
                 if (sample) {
                     ctx.type = 'image/png'
@@ -65,9 +73,9 @@ exports.init = api => {
             return serveFile(ctx, icon)
         },
         onDirEntry({ node: { source } }) {
-            const ext = basename(source).split('.')[1].toLowerCase()
-            if (ext && !sampleFiles[ext] && matches(ext, api.getConfig('system'))) //TODO optimize
-                sampleFiles[ext] = source
+            const ext = source && basename(source).split('.')[1]?.toLowerCase()
+            if (ext && !sampleFiles[ext] && matches(ext, api.getConfig('systemExt')))  //TODO optimize
+                sampleFiles[ext] = source // collect source for the file we'll use to extract the icon
         }
     }
 }
