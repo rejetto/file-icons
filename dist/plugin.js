@@ -1,4 +1,4 @@
-exports.version = 3.14
+exports.version = 3.15
 exports.description = "Customize file icons"
 exports.apiRequired = 8.891 // singleWorkerFromBatchWorker-returning
 exports.repo = "rejetto/file-icons"
@@ -8,9 +8,9 @@ exports.configDialog = {
     sx: { maxWidth: '40em' },
 }
 
-const fileMask = '*.png|*.ico|*.jpg|*.jpeg|*.gif|*.svg'
+const imageFileMask = '*.png|*.ico|*.jpg|*.jpeg|*.gif|*.svg'
 exports.config = {
-    folders: { frontend: true, type: 'real_path', fileMask, label: "Icon for folders" },
+    folders: { frontend: true, type: 'real_path', fileMask: imageFileMask, label: "Icon for folders" },
     systemExt: { frontend: true, label: "Use system icon for each extension", defaultValue: '', placeholder: 'Example: pdf|doc', helperText: "⚠️ Windows only. Use this when icon is the same for all files with same extension" },
     systemIndividual: { frontend: true, label: "System icon for each file", defaultValue: '', placeholder: 'Example: exe', helperText: "⚠️ Windows only. This is normally useful only with exe files." },
     icons: {
@@ -19,10 +19,10 @@ exports.config = {
         type: 'array',
         fields: {
             ext: { placeholder: 'Example: pdf|doc', helperText: "File extension(s). Don't include dot" },
-            iconFile: { type: 'real_path', $width: 3, fileMask },
+            iconFile: { type: 'real_path', $width: 3, fileMask: imageFileMask },
         }
     },
-    files: { frontend: true, type: 'real_path', fileMask, label: "Icon for other files" },
+    files: { frontend: true, type: 'real_path', fileMask: imageFileMask, label: "Icon for other files" },
 }
 
 exports.init = api => {
@@ -35,8 +35,10 @@ exports.init = api => {
         const params = sources.map(s => `"${s.replaceAll('"', '\\"')}"`).join(' ')
         await new Promise((resolve, reject) =>
             exec('powershell -ExecutionPolicy Bypass -File exicon.ps1 ' + params, { cwd: __dirname, windowsHide: true }, (err, stdout, stderr) => {
-                if (err ||= stderr)
+                if (err ||= stderr) {
+                    console.debug(err)
                     return reject(err)
+                }
                 resolve()
             }) )
         return Promise.all(sources.map(fn => {
