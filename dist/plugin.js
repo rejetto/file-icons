@@ -1,4 +1,4 @@
-exports.version = 3.15
+exports.version = 3.16
 exports.description = "Customize file icons"
 exports.apiRequired = 8.891 // singleWorkerFromBatchWorker-returning
 exports.repo = "rejetto/file-icons"
@@ -59,10 +59,10 @@ exports.init = api => {
             if (!fileIcon) return
             if (fileIcon === '|')
                 return async () => { // wait to get fileSource
-                    ctx.type = 'image/png'
                     const { fileSource } = ctx.state
+                    if (!fileSource) return
                     ctx.body = await (cache[fileSource] ||= getIcon(fileSource))
-                    return
+                    ctx.type = 'image/png'
                 }
             if (matches(fileIcon, api.getConfig('systemExt'))) {
                 const sample = sampleFiles[fileIcon.toLowerCase()]
