@@ -1,6 +1,6 @@
 Add-Type -AssemblyName System.Drawing
 foreach ($file in $args) {
-  if (Test-Path $file) {
+  if (Test-Path -LiteralPath $file) {
     try {
       $icon = [System.Drawing.Icon]::ExtractAssociatedIcon($file)
       $memoryStream = New-Object System.IO.MemoryStream
