@@ -1,4 +1,4 @@
-exports.version = 3.17
+exports.version = 3.18
 exports.description = "Customize file icons"
 exports.apiRequired = 8.891 // singleWorkerFromBatchWorker-returning
 exports.repo = "rejetto/file-icons"
@@ -26,13 +26,13 @@ exports.config = {
 }
 
 exports.init = api => {
-    const { matches, basename } = api.require('./misc')
+    const { matches, basename, randomId } = api.require('./misc')
     const { readFile, unlink } = api.require('fs/promises')
     const { exec } = api.require('child_process')
 
     const getIcon = api.require('./misc').singleWorkerFromBatchWorker(async jobs => {
-        const sources = jobs.flat()
-        const params = sources.map(s => `"${s.replaceAll('"', '\\"')}"`).join(' ')
+        const sourcesWithId = jobs.flat().map(x => [randomId(5), x])
+        const params = sourcesWithId.map(x => `"${x.join('|').replaceAll('"', '\\"')}"`).join(' ')
         await new Promise((resolve, reject) =>
             exec('powershell -ExecutionPolicy Bypass -File exicon.ps1 ' + params, { cwd: __dirname, windowsHide: true }, (err, stdout, stderr) => {
                 if (err ||= stderr) {
@@ -41,8 +41,8 @@ exports.init = api => {
                 }
                 resolve()
             }) )
-        return Promise.all(sources.map(fn => {
-            fn += '_icon.png'
+        return Promise.all(sourcesWithId.map(([id]) => {
+            const fn = `${api.storageDir}/${id}`
             return readFile(fn).then(x => {
                 unlink(fn)
                 return x
