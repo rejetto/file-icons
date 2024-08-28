@@ -1,4 +1,4 @@
-exports.version = 3.16
+exports.version = 3.17
 exports.description = "Customize file icons"
 exports.apiRequired = 8.891 // singleWorkerFromBatchWorker-returning
 exports.repo = "rejetto/file-icons"
@@ -81,7 +81,7 @@ exports.init = api => {
             return serveFile(ctx, icon)
         },
         onDirEntry({ node: { source } }) {
-            const ext = source && basename(source).split('.')[1]?.toLowerCase()
+            const ext = source && basename(source).split('.').at(-1)?.toLowerCase()
             if (ext && !sampleFiles[ext] && matches(ext, api.getConfig('systemExt')))  //TODO optimize
                 sampleFiles[ext] = source // collect source for the file we'll use to extract the icon
         }
