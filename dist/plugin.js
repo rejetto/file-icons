@@ -1,4 +1,4 @@
-exports.version = 3.18
+exports.version = 3.19
 exports.description = "Customize file icons"
 exports.apiRequired = 8.891 // singleWorkerFromBatchWorker-returning
 exports.repo = "rejetto/file-icons"
@@ -29,6 +29,7 @@ exports.init = api => {
     const { matches, basename, randomId } = api.require('./misc')
     const { readFile, unlink } = api.require('fs/promises')
     const { exec } = api.require('child_process')
+    const { resolve } = api.require('path')
 
     const getIcon = api.require('./misc').singleWorkerFromBatchWorker(async jobs => {
         const sourcesWithId = jobs.flat().map(x => [randomId(5), x])
@@ -83,7 +84,7 @@ exports.init = api => {
         onDirEntry({ node: { source } }) {
             const ext = source && basename(source).split('.').at(-1)?.toLowerCase()
             if (ext && !sampleFiles[ext] && matches(ext, api.getConfig('systemExt')))  //TODO optimize
-                sampleFiles[ext] = source // collect source for the file we'll use to extract the icon
+                sampleFiles[ext] = resolve(source) // collect source for the file we'll use to extract the icon
         }
     }
 }
