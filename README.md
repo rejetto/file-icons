@@ -4,7 +4,7 @@
 
 This configuration
 
-<img width="400" alt="image" src="https://github.com/rejetto/file-icons/assets/1367199/731d5fd0-950f-42e4-beeb-46f92b72c30b">
+<img width="400" alt="image" src="https://github.com/user-attachments/assets/10efd9f6-1ed9-48ca-9970-3daba58e2bc3">
 
 leads to this result
 
