@@ -1,4 +1,4 @@
-exports.version = 3.20
+exports.version = 3.3
 exports.description = "Customize file icons"
 exports.apiRequired = 8.891 // singleWorkerFromBatchWorker-returning
 exports.repo = "rejetto/file-icons"
