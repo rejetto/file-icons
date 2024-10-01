@@ -1,4 +1,4 @@
-exports.version = 3.3
+exports.version = 3.31
 exports.description = "Customize file icons"
 exports.apiRequired = 8.891 // singleWorkerFromBatchWorker-returning
 exports.repo = "rejetto/file-icons"
@@ -32,7 +32,7 @@ exports.init = api => {
     const { resolve } = api.require('path')
 
     const getIcon = api.require('./misc').singleWorkerFromBatchWorker(async jobs => {
-        const sourcesWithId = jobs.flat().map(x => [randomId(5), x])
+        const sourcesWithId = jobs.flat().map(x => [randomId(5), resolve(x)])
         const params = sourcesWithId.map(x => `"${x.join('|').replaceAll('"', '\\"')}"`).join(' ')
         await new Promise((resolve, reject) =>
             exec('powershell -ExecutionPolicy Bypass -File exicon.ps1 ' + params, { cwd: __dirname, windowsHide: true }, (err, stdout, stderr) => {
@@ -58,7 +58,7 @@ exports.init = api => {
         async middleware(ctx) {
             const { fileIcon } = ctx.query
             if (!fileIcon) return
-            if (fileIcon === '|')
+            if (fileIcon === '|') // systemIndividual
                 return async () => { // wait to get fileSource
                     const { fileSource } = ctx.state
                     if (!fileSource) return
@@ -84,7 +84,7 @@ exports.init = api => {
         onDirEntry({ node: { source, isFolder } }) {
             const ext = !isFolder && source && basename(source).split('.').at(-1)?.toLowerCase()
             if (ext && !sampleFiles[ext] && matches(ext, api.getConfig('systemExt')))  //TODO optimize
-                sampleFiles[ext] = resolve(source) // collect source for the file we'll use to extract the icon
+                sampleFiles[ext] = source // collect source for the file we'll use to extract the icon
         }
     }
 }
