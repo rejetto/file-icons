@@ -1,4 +1,4 @@
-exports.version = 3.31
+exports.version = 3.32
 exports.description = "Customize file icons"
 exports.apiRequired = 8.891 // singleWorkerFromBatchWorker-returning
 exports.repo = "rejetto/file-icons"
@@ -20,7 +20,8 @@ exports.config = {
         fields: {
             ext: { placeholder: 'Example: pdf|doc', helperText: "File extension(s). Don't include dot" },
             iconFile: { type: 'real_path', $width: 3, fileMask: imageFileMask },
-        }
+        },
+		defaultValue: []
     },
     files: { frontend: true, type: 'real_path', fileMask: imageFileMask, label: "Icon for other files" },
 }
