@@ -1,6 +1,6 @@
 exports.version = 3.32
 exports.description = "Customize file icons"
-exports.apiRequired = 8.891 // singleWorkerFromBatchWorker-returning
+exports.apiRequired = 9 // new onEvent callback parameters
 exports.repo = "rejetto/file-icons"
 exports.frontend_js = 'main.js'
 

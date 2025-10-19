@@ -7,7 +7,7 @@
     const isIndividual = HFS.misc.makeMatcher(cfg.systemIndividual)
     const { folders, files } = cfg
     const { h, prefixUrl } = HFS
-    HFS.onEvent('entryIcon', ({ entry: { ext, isFolder, uri } }, tools, output) => {
+    HFS.onEvent('entryIcon', ({ entry: { ext, isFolder, uri } }, { output }) => {
         if (output.some(Boolean)) return // skip if another plugin already set an icon
         if (!isFolder && isIndividual(ext))
             return h('img', { src: uri + '?fileIcon=|', className: 'icon custom-icon' })
