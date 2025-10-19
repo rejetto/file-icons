@@ -1,9 +1,11 @@
-exports.version = 3.32
+exports.version = 3.33
 exports.description = "Customize file icons"
 exports.apiRequired = 9 // new onEvent callback parameters
 exports.repo = "rejetto/file-icons"
 exports.frontend_js = 'main.js'
-
+exports.changelog = [
+    { "version": 3.33, "message": "improved compatibility" },
+]
 exports.configDialog = {
     sx: { maxWidth: '40em' },
 }
