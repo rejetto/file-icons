@@ -1,9 +1,10 @@
-exports.version = 3.33
+exports.version = 3.34
 exports.description = "Customize file icons"
 exports.apiRequired = 9 // new onEvent callback parameters
 exports.repo = "rejetto/file-icons"
 exports.frontend_js = 'main.js'
 exports.changelog = [
+    { "version": 3.34, "message": "compatibility with HFS 3.1" },
     { "version": 3.33, "message": "improved compatibility" },
 ]
 exports.configDialog = {
@@ -29,10 +30,10 @@ exports.config = {
 }
 
 exports.init = api => {
-    const { matches, basename, randomId } = api.require('./misc')
+    const { matches, randomId } = api.require('./misc')
     const { readFile, unlink } = api.require('fs/promises')
     const { exec } = api.require('child_process')
-    const { resolve } = api.require('path')
+    const { basename, resolve } = api.require('path')
 
     const getIcon = api.require('./misc').singleWorkerFromBatchWorker(async jobs => {
         const sourcesWithId = jobs.flat().map(x => [randomId(5), resolve(x)])
